@@ -21,7 +21,6 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// --- ADDED TEST DB ROUTE HERE ---
 app.get("/api/test-db", (req, res) => {
   res.json({ message: "DB models ready" });
 });
@@ -31,9 +30,9 @@ app.get("/", (req, res) => {
   res.send("Backend is running securely 🚀");
 });
 
-// 4. Future Routes 
-// app.use("/api/auth", authRoutes);
-// app.use("/api/documents", docRoutes);
+// 4. Auth & Functional Routes (ADD IT HERE)
+app.use("/api/auth", require("./routes/authRoutes")); 
+// app.use("/api/documents", require("./routes/documentRoutes")); // Placeholder for later
 
 // --- DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
@@ -45,3 +44,6 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
+
+
