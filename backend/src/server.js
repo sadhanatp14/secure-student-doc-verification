@@ -31,8 +31,8 @@ app.get("/", (req, res) => {
 });
 
 // 4. Auth & Functional Routes (ADD IT HERE)
-app.use("/api/auth", require("./routes/authRoutes")); 
-// app.use("/api/documents", require("./routes/documentRoutes")); // Placeholder for later
+app.use("/api/auth", require("../routes/authRoutes")); 
+// app.use("/api/documents", require("../routes/documentRoutes")); // Placeholder for later
 
 // --- DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
