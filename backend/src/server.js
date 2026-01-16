@@ -30,9 +30,15 @@ app.get("/", (req, res) => {
   res.send("Backend is running securely 🚀");
 });
 
-// 4. Auth & Functional Routes (ADD IT HERE)
+// 4. Auth & Functional Routes 
+// Public routes
 app.use("/api/auth", require("../routes/authRoutes")); 
-// app.use("/api/documents", require("../routes/documentRoutes")); // Placeholder for later
+
+// Protected/Functional routes (The "Objects" in your Access Control Matrix)
+app.use("/api/protected", require("../routes/protectedRoutes")); 
+app.use("/api/courses", require("../routes/courseRoutes")); // <--- ADD THIS HERE
+
+// ---------------------------------
 
 // --- DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
@@ -44,6 +50,4 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-
-
 

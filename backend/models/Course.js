@@ -6,15 +6,24 @@ const CourseSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
+
   courseName: {
     type: String,
     required: true
   },
+
+  // 🔐 Encrypted sensitive data
+  encryptedDescription: {
+    type: String,
+    required: true
+  },
+
   faculty: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
   }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("Course", CourseSchema);
-
