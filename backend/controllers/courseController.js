@@ -1,6 +1,8 @@
 const Course = require("../models/Course");
 const { encrypt, decrypt } = require("../utils/cryptoUtil");
 const { signData, verifySignature } = require("../utils/signatureUtil");
+// ✅ STEP 1.1: ADD THIS LINE BELOW
+const { base64Encode, base64Decode } = require("../utils/encodingUtil");
 
 /**
  * CREATE COURSE (Faculty only)
@@ -82,4 +84,51 @@ exports.viewCourse = async (req, res) => {
     res.status(500).json({ message: "Unable to fetch course" });
   }
 };
+
+// ✅ STEP 1.2: ADD NEW ENCODING FUNCTIONS BELOW 👇
+
+/**
+ * ENCODE COURSE DETAILS (Base64)
+ * Any authenticated user
+ */
+exports.encodeCourse = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const dataToEncode = `${course.courseCode}|${course.courseName}`;
+    const encodedData = base64Encode(dataToEncode);
+
+    res.json({
+      encodedData
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Encoding failed" });
+  }
+};
+
+/**
+ * DECODE BASE64 DATA
+ */
+exports.decodeCourse = async (req, res) => {
+  try {
+    const { encodedData } = req.body;
+
+    const decodedData = base64Decode(encodedData);
+    const [courseCode, courseName] = decodedData.split("|");
+
+    res.json({
+      courseCode,
+      courseName
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Decoding failed" });
+  }
+};
+
 

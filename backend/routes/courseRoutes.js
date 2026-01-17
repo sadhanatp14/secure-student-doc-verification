@@ -3,12 +3,14 @@ const { verifyToken } = require("../middleware/authMiddleware");
 const { allowRoles } = require("../middleware/roleMiddleware");
 const {
   createCourse,
-  viewCourse
+  viewCourse,
+  encodeCourse, // ✅ Added
+  decodeCourse  // ✅ Added
 } = require("../controllers/courseController");
 
 const router = express.Router();
 
-// CREATE COURSE → Faculty/Admin
+// 1. CREATE COURSE → Faculty/Admin (Authorization: Restricted)
 router.post(
   "/",
   verifyToken,
@@ -16,7 +18,7 @@ router.post(
   createCourse
 );
 
-// VIEW DECRYPTED COURSE → Faculty/Admin ONLY
+// 2. VIEW DECRYPTED COURSE → Faculty/Admin ONLY (Authorization: Highly Restricted)
 router.get(
   "/:id",
   verifyToken,
@@ -24,6 +26,19 @@ router.get(
   viewCourse
 );
 
-module.exports = router;
+// 3. ENCODE COURSE → Any authenticated user (Authorization: General)
+router.get(
+  "/encode/:id",
+  verifyToken,
+  encodeCourse
+);
 
+// 4. DECODE BASE64 DATA → Any authenticated user (Authorization: General)
+router.post(
+  "/decode",
+  verifyToken,
+  decodeCourse
+);
+
+module.exports = router;
 
