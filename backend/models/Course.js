@@ -18,6 +18,12 @@ const CourseSchema = new mongoose.Schema({
     required: true
   },
 
+  // ✍️ ADD THIS HERE: Proves the data hasn't been tampered with
+  digitalSignature: {
+    type: String,
+    required: true
+  },
+
   faculty: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
