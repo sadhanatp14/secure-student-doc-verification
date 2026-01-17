@@ -9,14 +9,13 @@ exports.createCourse = async (req, res) => {
   try {
     const { courseCode, courseName, description } = req.body;
 
-    // Encrypt sensitive field
     const encryptedDescription = encrypt(description);
 
     const course = new Course({
       courseCode,
       courseName,
       encryptedDescription,
-      faculty: req.user.userId   // extracted from JWT
+      faculty: req.user.userId
     });
 
     await course.save();
@@ -56,3 +55,4 @@ exports.viewCourse = async (req, res) => {
     res.status(500).json({ message: "Unable to fetch course" });
   }
 };
+

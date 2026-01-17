@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-// Faculty creates encrypted course
+// CREATE COURSE → Faculty/Admin
 router.post(
   "/",
   verifyToken,
@@ -16,11 +16,11 @@ router.post(
   createCourse
 );
 
-// Student views decrypted course
+// VIEW DECRYPTED COURSE → Faculty/Admin ONLY
 router.get(
   "/:id",
   verifyToken,
-  allowRoles("student", "faculty", "admin"),
+  allowRoles("faculty", "admin"),
   viewCourse
 );
 
