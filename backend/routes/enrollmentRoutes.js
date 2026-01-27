@@ -66,6 +66,14 @@ router.get(
   enrollmentController.getAllApprovedEnrollmentsAdmin
 );
 
+// DELETE enrollment (admin only)
+router.delete(
+  "/:id",
+  verifyToken,
+  allowRoles("admin"),
+  enrollmentController.deleteEnrollmentAdmin
+);
+
 // UPDATE enrollment status (faculty only)
 router.post(
   "/update-status",

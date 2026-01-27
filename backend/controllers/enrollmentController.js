@@ -285,3 +285,25 @@ exports.getAllApprovedEnrollmentsAdmin = async (req, res) => {
     res.status(500).json({ message: "Unable to fetch approved enrollments" });
   }
 };
+
+/**
+ * DELETE ENROLLMENT (Admin)
+ * Admin can remove any enrollment; affects student/faculty views immediately
+ */
+exports.deleteEnrollmentAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const enrollment = await Enrollment.findById(id);
+
+    if (!enrollment) {
+      return res.status(404).json({ message: "Enrollment not found" });
+    }
+
+    await enrollment.deleteOne();
+
+    res.json({ message: "Enrollment deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting enrollment (admin):", error);
+    res.status(500).json({ message: "Unable to delete enrollment" });
+  }
+};

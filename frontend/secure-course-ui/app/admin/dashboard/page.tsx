@@ -209,16 +209,49 @@ export default function AdminDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Enrollment Explorer */}
+      {/* Explorers */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Enrollment Explorer */}
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle>Enrollment Explorer</CardTitle>
+            <CardDescription>Filter enrolled students by course and faculty</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/enrollments">
+              <Button className="w-full">
+                View Enrollments <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Course Explorer */}
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle>Course Explorer</CardTitle>
+            <CardDescription>Filter courses by faculty and manage deletions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/courses">
+              <Button className="w-full">
+                View Courses <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* User Management */}
       <Card className="border-0 shadow-sm">
         <CardHeader>
-          <CardTitle>Enrollment Explorer</CardTitle>
-          <CardDescription>Filter enrolled students by course and faculty</CardDescription>
+          <CardTitle>User Management</CardTitle>
+          <CardDescription>View and delete student and faculty accounts</CardDescription>
         </CardHeader>
         <CardContent>
-          <Link href="/admin/enrollments">
+          <Link href="/admin/users">
             <Button className="w-full">
-              View Enrollments <ArrowRight className="w-4 h-4 ml-2" />
+              Manage Users <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
         </CardContent>

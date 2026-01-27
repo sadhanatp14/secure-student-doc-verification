@@ -40,6 +40,7 @@ app.use("/api/courses", require("../routes/courseRoutes")); // <--- ADD THIS HER
 app.use("/api/enrollment", require("../routes/enrollmentRoutes")); // Enrollment routes
 
 app.use("/api/admin", require("../routes/adminRoutes"));
+app.use("/api/users", require("../routes/userRoutes")); // User management routes
 // ---------------------------------
 
 // --- DATABASE CONNECTION ---

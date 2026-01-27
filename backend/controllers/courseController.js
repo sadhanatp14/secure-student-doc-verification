@@ -200,8 +200,10 @@ exports.deleteCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // Only the creator (faculty) can delete
-    if (course.faculty.toString() !== req.user.userId) {
+    // Allow admin or the creator (faculty) to delete
+    const isOwner = course.faculty.toString() === req.user.userId
+    const isAdmin = req.user.role === "admin"
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({ message: "You can only delete courses you created" });
     }
 

@@ -105,6 +105,14 @@ export const adminAPI = {
     }),
   getAllApprovedEnrollments: () =>
     apiClient.get<any[]>("/enrollment/all-approved"),
+  deleteEnrollment: (id: string) =>
+    apiClient.delete(`/enrollment/${id}`),
+  getAllStudents: () =>
+    apiClient.get<any[]>("/users/students"),
+  getAllFaculty: () =>
+    apiClient.get<any[]>("/users/faculty"),
+  deleteUser: (id: string) =>
+    apiClient.delete(`/users/${id}`),
 };
 
 // Enrollment endpoints

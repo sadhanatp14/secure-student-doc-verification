@@ -1,11 +1,13 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
 import { adminAPI, enrollmentAPI } from "@/lib/api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Loader2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Loader2, ArrowLeft, Trash2 } from "lucide-react"
 
 export default function AdminEnrollmentsPage() {
   const [courses, setCourses] = useState<any[]>([])
@@ -60,9 +62,33 @@ export default function AdminEnrollmentsPage() {
     })
   }, [enrollments, selectedCourse, selectedFaculty])
 
+  const handleDelete = async (id: string) => {
+    const confirm = window.confirm("Remove this student from the course?")
+    if (!confirm) return
+    try {
+      setLoading(true)
+      await adminAPI.deleteEnrollment(id)
+      setEnrollments((prev) => prev.filter((enr: any) => enr._id !== id))
+    } catch (err: any) {
+      setError(err.message || "Failed to delete enrollment")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="p-8 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <Link href="/admin/dashboard" className="group inline-flex items-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 rounded-full text-muted-foreground group-hover:text-blue-600"
+            aria-label="Back to Admin"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+        </Link>
         <div>
           <h1 className="text-2xl font-bold">Enrollments Overview</h1>
           <p className="text-muted-foreground text-sm">Filter approved enrollments by course and faculty</p>
@@ -136,7 +162,7 @@ export default function AdminEnrollmentsPage() {
             {filteredEnrollments.map((enrollment: any) => (
               <div
                 key={enrollment._id}
-                className="border rounded-lg p-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
+                className="border rounded-lg p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -152,6 +178,15 @@ export default function AdminEnrollmentsPage() {
                   <div className="text-sm text-muted-foreground">
                     {enrollment.course?.courseCode} · {enrollment.course?.faculty?.name}
                   </div>
+                </div>
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDelete(enrollment._id)}
+                  >
+                    <Trash2 className="w-4 h-4 mr-1" /> Remove
+                  </Button>
                 </div>
               </div>
             ))}

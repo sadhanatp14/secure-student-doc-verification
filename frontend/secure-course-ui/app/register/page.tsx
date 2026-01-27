@@ -26,18 +26,21 @@ export default function RegisterPage() {
 
   const getPasswordStrength = (password: string) => {
     if (!password) return { strength: 0, label: "", color: "" }
-    let strength = 0
-    if (password.length >= 8) strength++
-    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++
-    if (/\d/.test(password)) strength++
-    if (/[@$!%*?&]/.test(password)) strength++
 
-    const labels = ["Weak", "Fair", "Good", "Strong"]
-    const colors = ["text-destructive", "text-orange-500", "text-yellow-500", "text-green-500"]
+    const hasLength = password.length >= 8
+    const hasUpper = /[A-Z]/.test(password)
+    const hasLower = /[a-z]/.test(password)
+    const hasNumber = /\d/.test(password)
+    const hasSymbol = /[@$!%*?&]/.test(password)
+
+    // Strong only when all conditions are met
+    const allMet = hasLength && hasUpper && hasLower && hasNumber && hasSymbol
+
+    const strength = allMet ? 4 : 0
     return {
       strength,
-      label: labels[strength - 1] || "Weak",
-      color: colors[strength - 1] || "text-destructive",
+      label: allMet ? "Strong" : "Weak",
+      color: allMet ? "text-green-500" : "text-destructive",
     }
   }
 
@@ -59,8 +62,8 @@ export default function RegisterPage() {
         return
       }
 
-      if (formData.password.length < 8) {
-        setError("Password must be at least 8 characters")
+      if (passwordStrength.label !== "Strong") {
+        setError("Password must be strong: 8+ chars, uppercase, lowercase, number, symbol")
         return
       }
 
@@ -100,6 +103,12 @@ export default function RegisterPage() {
               <p className="font-medium">Account Created</p>
               <p className="text-xs mt-1">Your role has been assigned based on your invitation token. Redirecting to login...</p>
             </div>
+            <Button
+              onClick={() => router.push("/login")}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              Back to Sign In
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -148,7 +157,7 @@ export default function RegisterPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium flex items-center gap-2">
                 <User className="w-4 h-4 text-primary" />
-                Roll Number
+                Roll Number / Faculty ID
               </label>
               <Input
                 type="text"
@@ -206,6 +215,12 @@ export default function RegisterPage() {
                   <span className={passwordStrength.color}>{passwordStrength.label}</span>
                 </div>
               )}
+              <ul className="text-xs text-muted-foreground space-y-1 mt-1 list-disc list-inside">
+                <li>At least 8 characters</li>
+                <li>At least one uppercase and one lowercase letter</li>
+                <li>At least one number</li>
+                <li>At least one symbol (@ $ ! % * ? &)</li>
+              </ul>
             </div>
 
             <div className="space-y-2">
@@ -235,17 +250,6 @@ export default function RegisterPage() {
             </div>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground text-center mb-3">Demo Invite Tokens:</p>
-            <div className="space-y-1 text-xs bg-secondary/50 p-3 rounded-lg">
-              <p>
-                <strong>Faculty:</strong> invite_faculty_123
-              </p>
-              <p>
-                <strong>Student:</strong> invite_student_789
-              </p>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>
