@@ -12,13 +12,19 @@ const CourseSchema = new mongoose.Schema({
     required: true
   },
 
-  // 🔐 Encrypted sensitive data
-  encryptedDescription: {
+  // � Public description (visible to students)
+  description: {
     type: String,
     required: true
   },
 
-  // ✍️ ADD THIS HERE: Proves the data hasn't been tampered with
+  // 🔐 Encrypted course plan (only for faculty/admin)
+  encryptedCoursePlan: {
+    type: String,
+    required: true
+  },
+
+  // ✍️ Digital signature for data integrity
   digitalSignature: {
     type: String,
     required: true

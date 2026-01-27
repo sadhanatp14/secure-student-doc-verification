@@ -8,6 +8,15 @@ const EnrollmentSchema = new mongoose.Schema({
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course"
+  },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending"
+  },
+  rejectionReason: {
+    type: String,
+    default: ""
   }
 }, { timestamps: true });
 

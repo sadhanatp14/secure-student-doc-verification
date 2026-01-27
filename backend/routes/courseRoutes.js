@@ -4,8 +4,10 @@ const { allowRoles } = require("../middleware/roleMiddleware");
 const {
   createCourse,
   viewCourse,
-  encodeCourse, // ✅ Added
-  decodeCourse  // ✅ Added
+  encodeCourse,
+  decodeCourse,
+  updateCourse,
+  deleteCourse,
 } = require("../controllers/courseController");
 
 const router = express.Router();
@@ -38,6 +40,22 @@ router.post(
   "/decode",
   verifyToken,
   decodeCourse
+);
+
+// 5. UPDATE COURSE → Faculty/Admin (can only update their own courses)
+router.put(
+  "/:id",
+  verifyToken,
+  allowRoles("faculty", "admin"),
+  updateCourse
+);
+
+// 6. DELETE COURSE → Faculty/Admin (can only delete their own courses)
+router.delete(
+  "/:id",
+  verifyToken,
+  allowRoles("faculty", "admin"),
+  deleteCourse
 );
 
 module.exports = router;

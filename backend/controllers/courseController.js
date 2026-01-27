@@ -6,18 +6,18 @@ const { base64Encode, base64Decode } = require("../utils/encodingUtil");
 
 /**
  * CREATE COURSE (Faculty only)
- * Encrypts sensitive course description
+ * Encrypts course plan details
  * Digitally signs course data
  */
 exports.createCourse = async (req, res) => {
   try {
-    const { courseCode, courseName, description } = req.body;
+    const { courseCode, courseName, description, coursePlan } = req.body;
 
-    // Encrypt description
-    const encryptedDescription = encrypt(description);
+    // Encrypt course plan (sensitive data)
+    const encryptedCoursePlan = encrypt(coursePlan);
 
-    // Data to be signed
-    const dataToSign = `${courseCode}|${courseName}|${encryptedDescription}`;
+    // Data to be signed (includes public data + encrypted plan)
+    const dataToSign = `${courseCode}|${courseName}|${description}|${encryptedCoursePlan}`;
 
     // Generate digital signature
     const digitalSignature = signData(dataToSign);
@@ -25,7 +25,8 @@ exports.createCourse = async (req, res) => {
     const course = new Course({
       courseCode,
       courseName,
-      encryptedDescription,
+      description, // Public description
+      encryptedCoursePlan, // Encrypted course plan
       digitalSignature,
       faculty: req.user.userId
     });
@@ -33,17 +34,18 @@ exports.createCourse = async (req, res) => {
     await course.save();
 
     res.status(201).json({
-      message: "Course created with encrypted data & digital signature"
+      message: "Course created with encrypted plan & digital signature"
     });
 
   } catch (error) {
+    console.error("Course creation error:", error);
     res.status(500).json({ message: "Course creation failed" });
   }
 };
 
 /**
  * VIEW COURSE (Authorized users)
- * Verifies digital signature before decrypting
+ * Verifies digital signature before decrypting course plan
  */
 exports.viewCourse = async (req, res) => {
   try {
@@ -55,7 +57,7 @@ exports.viewCourse = async (req, res) => {
     }
 
     // Reconstruct signed data
-    const dataToVerify = `${course.courseCode}|${course.courseName}|${course.encryptedDescription}`;
+    const dataToVerify = `${course.courseCode}|${course.courseName}|${course.description}|${course.encryptedCoursePlan}`;
 
     // Verify digital signature
     const isValid = verifySignature(
@@ -63,24 +65,27 @@ exports.viewCourse = async (req, res) => {
       course.digitalSignature
     );
 
-    if (!isValid) {
-      return res.status(400).json({
-        message: "Data integrity check failed!"
-      });
+    // Decrypt course plan (allow even if signature invalid for editing old courses)
+    let decryptedCoursePlan;
+    try {
+      decryptedCoursePlan = decrypt(course.encryptedCoursePlan);
+    } catch (error) {
+      console.error("Decryption failed:", error);
+      decryptedCoursePlan = "";
     }
-
-    // Decrypt only if signature is valid
-    const decryptedDescription = decrypt(course.encryptedDescription);
 
     res.json({
       courseCode: course.courseCode,
       courseName: course.courseName,
-      description: decryptedDescription,
-      verified: true,
+      description: course.description, // Public description
+      coursePlan: decryptedCoursePlan, // Decrypted plan
+      verified: isValid,
+      signatureValid: isValid,
       faculty: course.faculty
     });
 
   } catch (error) {
+    console.error("View course error:", error);
     res.status(500).json({ message: "Unable to fetch course" });
   }
 };
@@ -128,6 +133,83 @@ exports.decodeCourse = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Decoding failed" });
+  }
+};
+
+  /**
+   * UPDATE COURSE (Faculty only - can only update their own courses)
+   * Re-encrypts course plan and regenerates digital signature
+   */
+  exports.updateCourse = async (req, res) => {
+    try {
+      const { courseCode, courseName, description, coursePlan } = req.body;
+      const courseId = req.params.id;
+
+      // Find the course
+      const course = await Course.findById(courseId);
+
+      if (!course) {
+        return res.status(404).json({ message: "Course not found" });
+      }
+
+      // Check if the user is the faculty who created this course
+      if (course.faculty.toString() !== req.user.userId) {
+        return res.status(403).json({ message: "You can only update courses you created" });
+      }
+
+      // Encrypt course plan if provided, otherwise keep existing
+      const encryptedCoursePlan = coursePlan 
+        ? encrypt(coursePlan) 
+        : course.encryptedCoursePlan;
+
+      // Data to be signed
+      const dataToSign = `${courseCode}|${courseName}|${description}|${encryptedCoursePlan}`;
+
+      // Generate new digital signature
+      const digitalSignature = signData(dataToSign);
+
+      // Update course
+      course.courseCode = courseCode;
+      course.courseName = courseName;
+      course.description = description;
+      course.encryptedCoursePlan = encryptedCoursePlan;
+      course.digitalSignature = digitalSignature;
+
+      await course.save();
+
+      res.json({
+        message: "Course updated successfully with new digital signature"
+      });
+
+    } catch (error) {
+      console.error("Course update error:", error);
+      res.status(500).json({ message: "Course update failed" });
+    }
+  };
+
+/**
+ * DELETE COURSE (Faculty/Admin)
+ * Faculty can delete only their own courses
+ */
+exports.deleteCourse = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Only the creator (faculty) can delete
+    if (course.faculty.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "You can only delete courses you created" });
+    }
+
+    await course.deleteOne();
+    res.json({ message: "Course deleted successfully" });
+  } catch (error) {
+    console.error("Course delete error:", error);
+    res.status(500).json({ message: "Course delete failed" });
   }
 };
 

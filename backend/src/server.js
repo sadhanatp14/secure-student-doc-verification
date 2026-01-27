@@ -37,7 +37,9 @@ app.use("/api/auth", require("../routes/authRoutes"));
 // Protected/Functional routes (The "Objects" in your Access Control Matrix)
 app.use("/api/protected", require("../routes/protectedRoutes")); 
 app.use("/api/courses", require("../routes/courseRoutes")); // <--- ADD THIS HERE
+app.use("/api/enrollment", require("../routes/enrollmentRoutes")); // Enrollment routes
 
+app.use("/api/admin", require("../routes/adminRoutes"));
 // ---------------------------------
 
 // --- DATABASE CONNECTION ---
@@ -50,4 +52,3 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-

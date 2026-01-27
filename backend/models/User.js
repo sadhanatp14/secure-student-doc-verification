@@ -17,6 +17,12 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
+  rollNumber: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+
   role: {
     type: String,
     enum: ["student", "faculty", "admin"],
