@@ -34,7 +34,7 @@ exports.sendOTPEmail = async (email, otp) => {
     const mailOptions = {
       from: process.env.EMAIL_USER || "your-email@gmail.com",
       to: email,
-      subject: "Your One-Time Password (OTP) for Secure Student Doc Verification",
+      subject: "Your One-Time Password (OTP) for Crypt-o-Course Login",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
@@ -53,9 +53,7 @@ exports.sendOTPEmail = async (email, otp) => {
             </p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
             <p style="color: #999; font-size: 12px; text-align: center;">
-              Secure Student Document Verification System
-            </p>
-          </div>
+            Crypt-o-Course | Cryptographically Secured Course Management
         </div>
       `
     };

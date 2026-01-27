@@ -139,8 +139,8 @@ export default function VerifyOTPPage() {
             </div>
           </div>
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold text-center">Multi-Factor Authentication</h2>
-            <p className="text-muted-foreground text-center">Enhanced security for your account</p>
+            <h2 className="text-3xl font-bold text-center">Crypt-o-Course</h2>
+            <p className="text-muted-foreground text-center">Multi-Factor Authentication for enhanced security</p>
             <div className="space-y-3 mt-6">
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />

@@ -121,9 +121,9 @@ export default function RegisterPage() {
         <CardHeader>
           <CardTitle className="text-2xl flex items-center gap-2">
             <ShieldCheck className="w-6 h-6 text-primary" />
-            Create Account
+            Join Crypt-o-Course
           </CardTitle>
-          <CardDescription>Join our secure course management system</CardDescription>
+          <CardDescription>Create your account on our cryptographically secured platform</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

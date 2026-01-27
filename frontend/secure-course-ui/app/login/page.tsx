@@ -58,21 +58,21 @@ export default function LoginPage() {
             </div>
           </div>
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold text-center">Protected Access</h2>
-            <p className="text-muted-foreground text-center">Enterprise-grade course management</p>
+            <h2 className="text-3xl font-bold text-center">Crypt-o-Course</h2>
+            <p className="text-muted-foreground text-center">Cryptographically Secured Course Management Platform</p>
             <div className="space-y-3 mt-6">
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                 <div className="text-sm">
-                  <p className="font-medium">Zero-Trust Security</p>
-                  <p className="text-muted-foreground text-xs">Every access verified and logged</p>
+                  <p className="font-medium">NIST-Compliant Authentication</p>
+                  <p className="text-muted-foreground text-xs">Follows NIST SP 800-63-2 E-Authentication Architecture</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Lock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                 <div className="text-sm">
-                  <p className="font-medium">Encrypted Data</p>
-                  <p className="text-muted-foreground text-xs">AES-256 encryption standard</p>
+                  <p className="font-medium">Multi-Layer Encryption</p>
+                  <p className="text-muted-foreground text-xs">AES-256, RSA-2048 & SHA-256 cryptography</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -89,8 +89,8 @@ export default function LoginPage() {
         {/* Login Form Section */}
         <Card className="shadow-lg border-0 animate-slide-in-up">
           <CardHeader>
-            <CardTitle className="text-2xl">Sign In</CardTitle>
-            <CardDescription>Access your secure course enrollment system</CardDescription>
+            <CardTitle className="text-2xl">Sign In to Crypt-o-Course</CardTitle>
+            <CardDescription>Access your cryptographically secured course platform</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,13 +138,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="remember" className="w-4 h-4 rounded" />
-                <label htmlFor="remember" className="text-sm text-muted-foreground">
-                  Remember me
-                </label>
-              </div>
-
               <Button
                 type="submit"
                 disabled={loading}
@@ -166,13 +159,13 @@ export default function LoginPage() {
               <p className="text-xs text-muted-foreground text-center mb-3">Demo Credentials:</p>
               <div className="space-y-2 text-xs bg-secondary/50 p-3 rounded-lg">
                 <p>
-                  <strong>Student:</strong> test@student.com / test123
+                  <strong>Student:</strong> sadhu.tp.07@gmail.com / Student@123
                 </p>
                 <p>
-                  <strong>Faculty:</strong> testfac@faculty.com / fac123
+                  <strong>Faculty:</strong> sadhanatp07@gmail.com / Faculty@123
                 </p>
                 <p>
-                  <strong>Admin:</strong> sadhana.aquaris@gmail.com / admin123
+                  <strong>Admin:</strong> sadhana.aquaris@gmail.com / Admin@123
                 </p>
               </div>
             </div>

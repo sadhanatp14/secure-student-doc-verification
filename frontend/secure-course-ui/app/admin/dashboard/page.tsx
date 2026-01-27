@@ -16,6 +16,7 @@ export default function AdminDashboardPage() {
   const [inviteEmail, setInviteEmail] = useState("")
   const [inviteRole, setInviteRole] = useState("student")
   const [generatedToken, setGeneratedToken] = useState("")
+  const [inviteSuccess, setInviteSuccess] = useState("")
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState("")
@@ -42,6 +43,7 @@ export default function AdminDashboardPage() {
     e.preventDefault()
     setError("")
     setGeneratedToken("")
+    setInviteSuccess("")
 
     if (!inviteEmail) {
       setError("Please enter an email")
@@ -52,6 +54,11 @@ export default function AdminDashboardPage() {
       setLoading(true)
       const response = await adminAPI.createInvite(inviteEmail, inviteRole)
       setGeneratedToken(response.inviteToken)
+      if (response.emailSent) {
+        setInviteSuccess("Invitation email sent successfully. Check recipient inbox.")
+      } else {
+        setInviteSuccess("Token generated. Email sending may have failed; share token manually.")
+      }
       setInviteEmail("")
     } catch (err: any) {
       setError(err.message || "Failed to generate invite token")
@@ -141,6 +148,12 @@ export default function AdminDashboardPage() {
             {error && (
               <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg text-sm">
                 {error}
+              </div>
+            )}
+
+            {inviteSuccess && (
+              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg text-sm">
+                {inviteSuccess}
               </div>
             )}
             

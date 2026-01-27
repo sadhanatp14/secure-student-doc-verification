@@ -104,7 +104,7 @@ export const courseAPI = {
 // Admin endpoints
 export const adminAPI = {
   createInvite: (email: string, role: string) =>
-    apiClient.post<{ inviteToken: string }>("/admin/invite", {
+    apiClient.post<{ inviteToken: string; emailSent?: boolean; emailMessageId?: string }>("/admin/invite", {
       email,
       role,
     }),
