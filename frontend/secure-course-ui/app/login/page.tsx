@@ -3,13 +3,13 @@
 import type React from "react"
 import { Shield } from "lucide-react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { authAPI } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Lock, Mail, Eye, EyeOff, AlertCircle } from "lucide-react"
+import { Lock, Mail, Eye, EyeOff, AlertCircle, Clock } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -17,7 +17,36 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [blockTimeLeft, setBlockTimeLeft] = useState(0)
   const router = useRouter()
+
+  // Countdown timer for block period
+  useEffect(() => {
+    if (blockTimeLeft <= 0) {
+      setIsBlocked(false)
+      return
+    }
+
+    const timer = setInterval(() => {
+      setBlockTimeLeft((prev) => {
+        if (prev <= 1) {
+          setIsBlocked(false)
+          setError("")
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [blockTimeLeft])
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,6 +68,15 @@ export default function LoginPage() {
       // Redirect to OTP verification page
       router.push("/verify-otp")
     } catch (err: any) {
+      // Check if account is blocked (429 status)
+      if (err.message && err.message.includes("try again in")) {
+        const match = err.message.match(/(\d+) minute/)
+        if (match) {
+          const minutes = parseInt(match[1])
+          setBlockTimeLeft(minutes * 60)
+          setIsBlocked(true)
+        }
+      }
       setError(err.message || "Login failed. Please try again.")
     } finally {
       setLoading(false)
@@ -101,6 +139,13 @@ export default function LoginPage() {
                 </div>
               )}
 
+              {isBlocked && (
+                <div className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-600 dark:text-yellow-500 px-4 py-3 rounded-lg text-sm flex gap-2">
+                  <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <span>Account temporarily locked. Try again in {formatTime(blockTimeLeft)}</span>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <label className="text-sm font-medium flex items-center gap-2">
                   <Mail className="w-4 h-4 text-primary" />
@@ -112,6 +157,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-background border border-input"
+                  disabled={isBlocked}
                 />
               </div>
 
@@ -127,11 +173,13 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="bg-background border border-input pr-10"
+                    disabled={isBlocked}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    disabled={isBlocked}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -140,8 +188,8 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="w-full"
+                disabled={loading || isBlocked}
               >
                 {loading ? "Signing in..." : "Sign In"}
               </Button>

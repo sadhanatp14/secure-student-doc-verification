@@ -11,4 +11,7 @@ router.post("/login", authController.login);
 // Verify OTP (Step 2 of MFA - Get JWT)
 router.post("/verify-otp", authController.verifyOTP);
 
+// Resend OTP (Resend OTP after expiry)
+router.post("/resend-otp", authController.resendOTP);
+
 module.exports = router;

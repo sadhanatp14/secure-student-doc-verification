@@ -24,7 +24,10 @@ const apiClient = {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || "API error");
+      const err: any = new Error(error.message || "API error");
+      // Preserve additional error properties (like maxAttemptsReached)
+      Object.assign(err, error);
+      throw err;
     }
 
     return response.json();

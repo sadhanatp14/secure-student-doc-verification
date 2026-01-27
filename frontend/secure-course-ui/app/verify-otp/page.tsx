@@ -100,7 +100,16 @@ export default function VerifyOTPPage() {
         }
       }, 1000)
     } catch (err: any) {
-      setError(err.message || "Invalid OTP. Please try again.")
+      // Check if max attempts reached
+      if (err.maxAttemptsReached) {
+        setError(err.message || "Maximum attempts reached. Redirecting to login...")
+        setTimeout(() => {
+          sessionStorage.removeItem("pendingEmail")
+          router.push("/login")
+        }, 2000)
+      } else {
+        setError(err.message || "Invalid OTP. Please try again.")
+      }
     } finally {
       setLoading(false)
     }
@@ -113,14 +122,24 @@ export default function VerifyOTPPage() {
     setError("")
 
     try {
-      // Resend OTP - just need to call login again with the email
-      // Note: In a real app, you'd have a separate resend endpoint
+      // Call resend OTP endpoint
+      const response = await fetch("http://localhost:5001/api/auth/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email })
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.message || "Failed to resend OTP")
+      }
+
       setSuccess("OTP resent to your email!")
       setTimeLeft(300) // Reset to 5 minutes
       setCanResend(false)
       setOtp("")
     } catch (err: any) {
-      setError("Failed to resend OTP. Please try again.")
+      setError(err.message || "Failed to resend OTP. Please try again.")
     } finally {
       setResendLoading(false)
     }
