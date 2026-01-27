@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Shield, User, Mail, UserPlus, ArrowRight, Loader2, Copy, CheckCircle, LogOut } from "lucide-react"
+import { Shield, User, Mail, UserPlus, ArrowRight, Loader2, Copy, CheckCircle, LogOut, Users, BookOpen } from "lucide-react"
 import Link from "next/link"
 
 export default function AdminDashboardPage() {
@@ -260,7 +260,7 @@ export default function AdminDashboardPage() {
       {/* Admin Privileges */}
       <Card className="border-0 shadow-sm">
         <CardHeader>
-          <CardTitle>Admin Privileges</CardTitle>
+          <CardTitle>Admin Capabilities</CardTitle>
           <CardDescription>What you can do as an administrator</CardDescription>
         </CardHeader>
         <CardContent>
@@ -270,9 +270,31 @@ export default function AdminDashboardPage() {
                 <UserPlus className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold">Generate Invite Tokens</h4>
+                <h4 className="font-semibold">Generate Invitation Tokens</h4>
                 <p className="text-sm text-muted-foreground">
-                  Create secure invitation tokens for new users with specific roles
+                  Create secure invitation tokens for new students and faculty (admin accounts must be created directly)
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Users className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold">User Management</h4>
+                <p className="text-sm text-muted-foreground">
+                  View and delete student and faculty accounts from the system
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <BookOpen className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Course Management</h4>
+                <p className="text-sm text-muted-foreground">
+                  View and delete any course from the system, filter by faculty
                 </p>
               </div>
             </div>
@@ -281,20 +303,20 @@ export default function AdminDashboardPage() {
                 <Shield className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold">Full System Access</h4>
+                <h4 className="font-semibold">Enrollment Oversight</h4>
                 <p className="text-sm text-muted-foreground">
-                  Access all features including course creation and management
+                  View all approved enrollments, filter by course and faculty, remove students from courses
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="bg-primary/10 rounded-full p-2">
-                <User className="w-4 h-4 text-primary" />
+                <Shield className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold">User Management</h4>
+                <h4 className="font-semibold">Full System Visibility</h4>
                 <p className="text-sm text-muted-foreground">
-                  Manage user roles and access control across the platform
+                  Access all administrative features and system resources
                 </p>
               </div>
             </div>

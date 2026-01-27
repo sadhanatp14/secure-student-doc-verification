@@ -259,6 +259,62 @@ export default function StudentDashboardPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Student Capabilities */}
+      <Card className="border-0 shadow-sm">
+        <CardHeader>
+          <CardTitle>Student Capabilities</CardTitle>
+          <CardDescription>What you can do as a student</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <BookOpen className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Browse Available Courses</h4>
+                <p className="text-sm text-muted-foreground">
+                  View all courses offered by faculty and filter based on your interests
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <ArrowRight className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Enroll in Courses</h4>
+                <p className="text-sm text-muted-foreground">
+                  Request enrollment in available courses (pending faculty approval)
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Users className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Track Enrollment Status</h4>
+                <p className="text-sm text-muted-foreground">
+                  Monitor pending approval requests and view rejected enrollments with reasons
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <User className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Manage Your Profile</h4>
+                <p className="text-sm text-muted-foreground">
+                  View your personal information and enrolled courses
+                </p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
