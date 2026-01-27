@@ -30,25 +30,14 @@ export default function LoginPage() {
         return
       }
 
-      // Call API to login
+      // Step 1: Verify credentials and get OTP sent
       const response = await authAPI.login(email, password)
       
-      // Store auth token and user data
-      localStorage.setItem("authToken", response.token)
-      localStorage.setItem("user", JSON.stringify(response.user))
-      localStorage.setItem("userRole", response.user.role)
-
-      // Redirect based on role
-      const role = response.user.role
-      if (role === "student") {
-        router.push("/student/dashboard")
-      } else if (role === "faculty") {
-        router.push("/faculty/dashboard")
-      } else if (role === "admin") {
-        router.push("/admin/dashboard")
-      } else {
-        router.push("/dashboard")
-      }
+      // Store email temporarily for OTP verification
+      sessionStorage.setItem("pendingEmail", email)
+      
+      // Redirect to OTP verification page
+      router.push("/verify-otp")
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.")
     } finally {
@@ -183,7 +172,7 @@ export default function LoginPage() {
                   <strong>Faculty:</strong> testfac@faculty.com / fac123
                 </p>
                 <p>
-                  <strong>Admin:</strong> admin@example.com / admin123
+                  <strong>Admin:</strong> sadhana.aquaris@gmail.com / admin123
                 </p>
               </div>
             </div>

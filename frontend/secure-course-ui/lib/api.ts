@@ -56,7 +56,7 @@ const apiClient = {
 // Auth endpoints
 export const authAPI = {
   login: (email: string, password: string) =>
-    apiClient.post<{ token: string; user: any }>("/auth/login", {
+    apiClient.post<{ token: string; user: any; requiresOTP: boolean }>("/auth/login", {
       email,
       password,
     }),
@@ -67,6 +67,11 @@ export const authAPI = {
       password,
       rollNumber,
       inviteToken,
+    }),
+  verifyOTP: (email: string, code: string) =>
+    apiClient.post<{ message: string; token: string; user: any }>("/auth/verify-otp", {
+      email,
+      code,
     }),
 };
 
