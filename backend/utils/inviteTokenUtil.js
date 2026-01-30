@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const INVITE_SECRET = process.env.INVITE_SECRET;
 
 if (!INVITE_SECRET) {
-  console.error("❌ INVITE_SECRET is not defined in environment variables");
+  console.error("INVITE_SECRET is not defined in environment variables");
   throw new Error("INVITE_SECRET environment variable is required");
 }
 

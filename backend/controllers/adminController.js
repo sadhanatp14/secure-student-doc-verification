@@ -17,7 +17,7 @@ const sendInviteEmail = async ({ to, token, role }) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to,
-    subject: "🔐 Crypt-o-Course Invitation – Complete Your Registration",
+    subject: "Crypt-o-Course Invitation – Complete Your Registration",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; color: #222;">
         <h2 style="color: #0b5ed7; margin-bottom: 12px;">🔐 Crypt-o-Course Invitation</h2>
