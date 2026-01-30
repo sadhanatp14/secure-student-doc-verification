@@ -160,6 +160,8 @@ Frontend will run on `http://localhost:3000`
 |----------|---------|-------------|
 | `NEXT_PUBLIC_API_URL` | `http://localhost:5001/api` | Backend API base URL |
 
+Frontend port = 3000 and run on `http://localhost:3000`
+
 ---
 
 ## Running the Application
