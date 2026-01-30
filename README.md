@@ -178,13 +178,11 @@ npm run dev
 
 Visit `http://localhost:3000` in your browser to access the application.
 
-### **Test Credentials**
+### **Registration**
 
-The system comes with a sample admin account:
-- **Email:** `admin@example.com`
-- **Password:** `admin123`
+Admin can be added directly in the database.
 
-You can register new users through the registration page.
+New users(student/faculty) added through the registration page.
 
 ---
 
