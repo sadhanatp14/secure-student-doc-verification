@@ -138,6 +138,16 @@ Frontend will run on `http://localhost:3000`
 - Email-based invitation system for new users
 - System dashboard with user and course statistics
 
+### **Faculty Functions**
+- Course creation, management and deletion
+- Reviewing and deciding on course registration requests
+- System dashboard with student and course statistics
+
+### **Student Functions**
+- Explore the available courses and sign up for new classes
+- Check which course requests are still being reviewed
+- View a complete overview of all enrolled and active courses
+
 ---
 
 ## Environment Variables Guide
